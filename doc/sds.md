@@ -1,0 +1,1 @@
+# SDS (Static Dynamic Strings)
