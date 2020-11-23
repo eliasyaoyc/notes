@@ -1,7 +1,7 @@
 # Redis Data Structure
 Implement the data structure in redis.
 
-* SDS (Static Dynamic Strings): 用于存储字符串和整形数据,兼容 C 语言标准字符串处理函数，且在此基础上保证了二进制安全。
+SDS (Static Dynamic Strings): 用于存储字符串和整形数据,兼容 C 语言标准字符串处理函数，且在此基础上保证了二进制安全。
 
 [SDS](/doc/sds.md)
 

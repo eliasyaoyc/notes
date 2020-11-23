@@ -35,7 +35,7 @@ struct __attribute__ ((__packed__)) sdshdr5 {
     char buf[]; // 柔性数组，存放实际内容
 };
 ```
-!()[/sdshdr5.png]
+!()[/doc/sdshdr5.png]
 
 而长度大于31的字符串，1个字节依然存不下。将 len 和 free 单独存放
 ```c
