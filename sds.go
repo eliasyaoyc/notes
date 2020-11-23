@@ -19,3 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package redis_structure
+
+type sdshdr5 struct {
+	flags byte
+	buf   []rune
+}
+
+type sdshdr8 struct {
+	len   uint8
+	alloc uint8
+	flags byte
+	buf   []rune
+}
+
+type sdshdr16 struct {
+	len   uint16
+	alloc uint16
+	flags byte
+	buf   []rune
+}
+
+type sdshdr32 struct {
+	len   uint32
+	alloc uint32
+	flags byte
+	buf   []rune
+}
+
+type sdshdr64 struct {
+	len   uint64
+	alloc uint64
+	flags byte
+	buf   []rune
+}
