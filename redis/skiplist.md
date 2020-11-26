@@ -8,7 +8,42 @@
     
 跳跃表的实现过程：请看 doc 中的 《为什么Redis一定要用跳表来实现有序集合？》
 
-Redis 中有关于zset的配置：
+## Redis 中的实现 
+跳表节点 zskiplistNode 结构体
+```c
+typedef struct zskiplistNode{
+   sds ele;
+   double score;
+   struct zskiplistNode *backward;
+   struct zskiplistLevel {
+        struct zskiplistNode *forward;
+        unsigned int span;  
+   } level[];
+} zskiplistNode
+```
+* ele: 用于存储字符串类型的数据
+* score：用于存储排序的分值
+* backward：后退指针：只能指向当前节点最底层的前一个节点，头节点和第一个节点-backward指向null，从后向前遍历跳跃表时使用
+* leve：柔性数组，每个节点的数组长度不一样，在生成跳跃表节点时，随机生成一个1~64的值，值越大出现的概率越低
+  * forward：指向本层下一个节点，尾节点的forward 指向null
+  * span: forward指向的节点与本节点之间的元素个数。span值越大，跳过的节点个数越多。
+  
+>跳跃表是Redis有序集合的底层实现方式之一，所以每个节点的ele存储有序集合的成员member值，score存储成员score值。所有节点的分值是按从小到大的方式排序的，当有序集合的成员分值相同时，节点会按member的字典序进行排序。
+
+跳跃表 zskiplist 结构：
+```c
+typedef struct zskiplist{
+  struct zskiplistNode *header,*tail;
+  unsigned long length;
+  int level;
+} zskiplist
+```
+* header: 指向跳跃表头节点。头节点是跳跃表的一个特殊节点，它的level数组元素个数为64。头节点在有序集合中不存储任何member和score值，ele值为NULL, score值为0；也不计入跳跃表的总长度。头节点在初始化时，64个元素的forward都指向NULL, span值都为0。
+* tail: 指向跳跃表尾节点
+* length: 跳跃表长度，表示除头节点之外的节点总数
+* level: 跳跃表的高度
+
+## Redis 中有关于zset的配置：
 * `zset-max-ziplist-entries 128`：zset采用压缩列表时，元素个数最大值。默认值为128
 * `zset-max-ziplist-value 64`：zset采用压缩列表时，每个元素的字符串长度最大值，默认为64
 ```c
