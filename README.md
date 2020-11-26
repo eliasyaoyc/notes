@@ -1,3 +1,3 @@
-# Study doc
+# doc
 [Redis](/redis/README.md)
 
